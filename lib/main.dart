@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'app_theme.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
@@ -14,6 +15,12 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  // Dark status bar icons on dark background
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+  ));
+
   runApp(const ScrambleCapstoneApp());
 }
 
@@ -22,13 +29,12 @@ class ScrambleCapstoneApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = buildAppTheme();
     return MaterialApp(
       title: 'Scramble — Capstone',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        useMaterial3: true,
+      theme: theme.copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(theme.textTheme),
       ),
       home: const HomeScreen(),
     );

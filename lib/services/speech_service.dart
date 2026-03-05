@@ -3,17 +3,28 @@ import 'dart:async';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
+/// Result from a pronunciation listening attempt.
+class SpeechResult {
+  final bool available;
+  final String recognised;
+
+  const SpeechResult({required this.available, required this.recognised});
+}
+
 /// Wraps speech-to-text initialisation, listening, and fuzzy pronunciation
 /// matching in one reusable service.
 class SpeechService {
   final stt.SpeechToText _speech = stt.SpeechToText();
 
-  /// Start listening for ~2.5 s.  Returns the recognised text (may be empty).
-  Future<String> listenForPronunciation({
+  /// Start listening for ~2.5 s.  Returns a [SpeechResult] indicating
+  /// whether speech recognition is available and what text was heard.
+  Future<SpeechResult> listenForPronunciation({
     required void Function(String) onPartialResult,
   }) async {
     final available = await _speech.initialize();
-    if (!available) return '';
+    if (!available) {
+      return const SpeechResult(available: false, recognised: '');
+    }
 
     String recognised = '';
 
@@ -25,7 +36,7 @@ class SpeechService {
     await Future.delayed(const Duration(milliseconds: 2500));
     _speech.stop();
 
-    return recognised;
+    return SpeechResult(available: true, recognised: recognised);
   }
 
   /// Compare [recognised] text against [expected] word.
