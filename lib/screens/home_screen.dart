@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Built for BEED Thesis — Informative Game',
+                      'Built for Personal Project by Kent Jake I. Sanico — Informative Game',
                       style:
                           TextStyle(color: AppColors.textMuted, fontSize: 11),
                       textAlign: TextAlign.center,
